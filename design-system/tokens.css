@@ -1,0 +1,237 @@
+/* TEAM NOGUEIRA — tokens de design
+ * Fonte da verdade: https://teamnogueiraabc.com.br/  ·  extraído em 2026-10-08
+ * Gerado a partir de tokens.json (mesmos valores). Origem e confiança de cada token: tokens.json.
+ * Tokens 'proposta' NÃO foram extraídos do site. */
+
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 300; font-display: swap; src: url('assets/fonts/Poppins-Light-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 400; font-display: swap; src: url('assets/fonts/Poppins-Regular-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 500; font-display: swap; src: url('assets/fonts/Poppins-Medium-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 600; font-display: swap; src: url('assets/fonts/Poppins-SemiBold-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 700; font-display: swap; src: url('assets/fonts/Poppins-Bold-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: normal; font-weight: 800; font-display: swap; src: url('assets/fonts/Poppins-ExtraBold-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: italic; font-weight: 600; font-display: swap; src: url('assets/fonts/Poppins-SemiBoldItalic-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: italic; font-weight: 700; font-display: swap; src: url('assets/fonts/Poppins-BoldItalic-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-style: italic; font-weight: 800; font-display: swap; src: url('assets/fonts/Poppins-ExtraBoldItalic-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Montserrat'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('assets/fonts/Montserrat-VariableFont-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Montserrat'; font-style: italic; font-weight: 100 900; font-display: swap; src: url('assets/fonts/Montserrat-Italic-VariableFont-latin.woff2') format('woff2'); }
+
+:root {
+
+  /* cor */
+  --tn-cor-vermelho-marca: #981517; /* primária · alto */
+  --tn-cor-vermelho-escuro: #A91411; /* secundária · alto */
+  --tn-cor-vermelho-vivo: #FF0000; /* acento · alto */
+  --tn-cor-carmim: #CE002B; /* acento (par do gradiente) · alto */
+  --tn-cor-carmim-destaque: #CD1F43; /* acento (destaque de palavra no hero) · alto */
+  --tn-cor-vinho: #790F0F; /* secundária escura · alto */
+  --tn-cor-vinho-profundo: #640200; /* fundo escuro (só em gradiente) · alto */
+  --tn-cor-vermelho-hover-link: #DA1011; /* estado (hover de link) · alto */
+  --tn-cor-preto: #000000; /* neutra / fundo · alto */
+  --tn-cor-preto-logo: #0C090C; /* neutra (símbolo do logo) · médio */
+  --tn-cor-fundo-hero-escuro: #0E0E0E; /* fundo (hero) · médio */
+  --tn-cor-texto-escuro: #181818; /* texto · alto */
+  --tn-cor-texto-corpo: #54595F; /* texto (corpo nas páginas de modalidade) · alto */
+  --tn-cor-cinza-tema: #424242; /* neutra / fundo · médio */
+  --tn-cor-cinza-borda-galeria: #CFCFCF; /* neutra (borda) · alto */
+  --tn-cor-branco: #FFFFFF; /* fundo / texto · alto */
+  --tn-cor-verde-whatsapp-inicio: #00B317; /* sucesso / WhatsApp · alto */
+  --tn-cor-verde-whatsapp-fim: #008A2E; /* sucesso / WhatsApp · alto */
+  --tn-cor-verde-botao-galeria: #5CB85C; /* sucesso (pontual) · médio */
+  --tn-cor-amarelo-kids: #FFD200; /* acento (somente TN Kids) · alto */
+
+  /* gradiente */
+  --tn-gradiente-botao-principal: linear-gradient(96deg, #FF0000 0%, #CE002B 100%); /* alto */
+  --tn-gradiente-botao-principal-hover: linear-gradient(93deg, #CE002B 0%, #FF0000 100%); /* alto */
+  --tn-gradiente-secao-vermelha: linear-gradient(180deg, #A91411 0%, #FF0000 100%); /* alto */
+  --tn-gradiente-faixa-vermelha-diagonal: linear-gradient(111deg, #FF0000 0%, #640200 100%); /* alto */
+  --tn-gradiente-overlay-fundadores: linear-gradient(89deg, #FF0000 0%, #640200 100%); /* alto */
+  --tn-gradiente-overlay-fundadores-opacidade: 0.85; /* alto */
+  --tn-gradiente-overlay-foto-secao: linear-gradient(180deg, #000000 0%, #981517 100%); /* alto */
+  --tn-gradiente-overlay-foto-secao-opacidade: 0.9; /* alto */
+  --tn-gradiente-overlay-hero-evento: linear-gradient(100deg, #000000 63%, #790F0F 100%); /* alto */
+  --tn-gradiente-overlay-hero-evento-opacidade: 0.8; /* alto */
+  --tn-gradiente-botao-whatsapp: linear-gradient(100deg, #00B317 0%, #008A2E 100%); /* alto */
+
+  /* fonte */
+  --tn-fonte-titulo: 'Poppins', sans-serif; /* alto */
+  --tn-fonte-corpo: 'Poppins', sans-serif; /* alto */
+  --tn-fonte-destaque: 'Montserrat', sans-serif; /* alto */
+  --tn-fonte-fallback-tema: 'Helvetica Neue', helvetica, arial, sans-serif; /* alto */
+
+  /* tipo */
+  --tn-tipo-hero-titulo-familia: 'Montserrat', sans-serif; /* alto */
+  --tn-tipo-hero-titulo-peso: 800; /* alto */
+  --tn-tipo-hero-titulo-estilo: normal; /* alto */
+  --tn-tipo-hero-titulo-tamanho-desktop: 40px; /* alto · extraído: 40px */
+  --tn-tipo-hero-titulo-tamanho-mobile: 22px; /* alto · extraído: 22px */
+  --tn-tipo-hero-titulo-altura-linha: 1; /* alto · extraído: 1 (40px/22px) */
+  --tn-tipo-hero-titulo-espacamento-letras: -0.02em; /* alto */
+  --tn-tipo-hero-titulo-caixa: uppercase; /* alto */
+  --tn-tipo-titulo-secao-familia: 'Poppins', sans-serif; /* alto */
+  --tn-tipo-titulo-secao-peso: 800; /* alto */
+  --tn-tipo-titulo-secao-estilo: italic; /* alto */
+  --tn-tipo-titulo-secao-tamanho-desktop: 30px; /* alto · extraído: 30px (41px nos títulos maiores da home) */
+  --tn-tipo-titulo-secao-tamanho-mobile: 23px; /* alto · extraído: 23px (31px na home) */
+  --tn-tipo-titulo-secao-altura-linha: 1; /* alto · extraído: 1 */
+  --tn-tipo-titulo-secao-espacamento-letras: -0.02em; /* alto */
+  --tn-tipo-titulo-secao-caixa: uppercase; /* alto */
+  --tn-tipo-titulo-faixa-familia: 'Poppins', sans-serif; /* alto */
+  --tn-tipo-titulo-faixa-peso: 800; /* alto */
+  --tn-tipo-titulo-faixa-estilo: italic; /* alto */
+  --tn-tipo-titulo-faixa-tamanho-desktop: 30px; /* alto · extraído: 30px (varia 23–30px entre páginas) */
+  --tn-tipo-titulo-faixa-tamanho-mobile: 22px; /* alto · extraído: 22px (varia 17–30px entre páginas) */
+  --tn-tipo-titulo-faixa-altura-linha: 1; /* alto · extraído: 1 */
+  --tn-tipo-titulo-faixa-espacamento-letras: -0.02em; /* alto */
+  --tn-tipo-titulo-faixa-caixa: uppercase; /* alto */
+  --tn-tipo-titulo-divisor-familia: 'Poppins', sans-serif; /* alto */
+  --tn-tipo-titulo-divisor-peso: 800; /* alto */
+  --tn-tipo-titulo-divisor-estilo: italic; /* alto */
+  --tn-tipo-titulo-divisor-tamanho-desktop: 30px; /* alto · extraído: 30px */
+  --tn-tipo-titulo-divisor-tamanho-mobile: 23px; /* alto · extraído: 23px */
+  --tn-tipo-titulo-divisor-altura-linha: 1; /* alto · extraído: 1 */
+  --tn-tipo-titulo-divisor-espacamento-letras: -0.02em; /* alto */
+  --tn-tipo-titulo-divisor-caixa: uppercase; /* alto */
+  --tn-tipo-titulo-card-familia: 'Poppins', sans-serif; /* alto */
+  --tn-tipo-titulo-card-peso: 700; /* alto */
+  --tn-tipo-titulo-card-estilo: italic; /* alto */
+  --tn-tipo-titulo-card-tamanho-desktop: 21px; /* alto · extraído: 21px */
+  --tn-tipo-titulo-card-tamanho-mobile: 21px; /* alto · extraído: 21px */
+  --tn-tipo-titulo-card-altura-linha: 1.1; /* alto · extraído: 1.1 */
+  --tn-tipo-titulo-card-espacamento-letras: -0.02em; /* alto */
+  --tn-tipo-titulo-card-caixa: uppercase; /* alto */
+  --tn-tipo-corpo-familia: 'Poppins', sans-serif; /* alto */
+  --tn-tipo-corpo-peso: 500; /* alto */
+  --tn-tipo-corpo-estilo: normal; /* alto */
+  --tn-tipo-corpo-tamanho-desktop: 19px; /* alto · extraído: 19px */
+  --tn-tipo-corpo-tamanho-mobile: 16px; /* alto · extraído: 16px */
+  --tn-tipo-corpo-altura-linha: 1.6; /* alto · extraído: 1.6 */
+  --tn-tipo-corpo-espacamento-letras: normal; /* alto */
+  --tn-tipo-corpo-caixa: none; /* alto */
+  --tn-tipo-corpo-hero-familia: 'Poppins', sans-serif; /* alto */
+  --tn-tipo-corpo-hero-peso: 500; /* alto */
+  --tn-tipo-corpo-hero-estilo: normal; /* alto */
+  --tn-tipo-corpo-hero-tamanho-desktop: 14px; /* alto · extraído: 14px */
+  --tn-tipo-corpo-hero-tamanho-mobile: 16px; /* alto · extraído: 16px */
+  --tn-tipo-corpo-hero-altura-linha: 1.6; /* alto · extraído: 1.6 */
+  --tn-tipo-corpo-hero-espacamento-letras: normal; /* alto */
+  --tn-tipo-corpo-hero-caixa: none; /* alto */
+  --tn-tipo-descricao-card-familia: 'Montserrat', sans-serif; /* alto */
+  --tn-tipo-descricao-card-peso: 500; /* alto */
+  --tn-tipo-descricao-card-estilo: normal; /* alto */
+  --tn-tipo-descricao-card-tamanho-desktop: 16px; /* alto · extraído: 16px */
+  --tn-tipo-descricao-card-tamanho-mobile: 16px; /* alto · extraído: 16px */
+  --tn-tipo-descricao-card-altura-linha: 1.6; /* alto · extraído: 1.6 */
+  --tn-tipo-descricao-card-espacamento-letras: normal; /* alto */
+  --tn-tipo-descricao-card-caixa: none; /* alto */
+  --tn-tipo-botao-familia: 'Montserrat', sans-serif; /* alto */
+  --tn-tipo-botao-peso: 700; /* alto */
+  --tn-tipo-botao-estilo: normal; /* alto */
+  --tn-tipo-botao-tamanho-desktop: 19px; /* alto · extraído: 19px */
+  --tn-tipo-botao-tamanho-mobile: 19px; /* alto · extraído: 19px */
+  --tn-tipo-botao-altura-linha: 1; /* alto · extraído: 1 */
+  --tn-tipo-botao-espacamento-letras: normal; /* alto */
+  --tn-tipo-botao-caixa: uppercase; /* alto */
+  --tn-tipo-botao-secundario-familia: 'Montserrat', sans-serif; /* alto */
+  --tn-tipo-botao-secundario-peso: 600; /* alto */
+  --tn-tipo-botao-secundario-estilo: normal; /* alto */
+  --tn-tipo-botao-secundario-tamanho-desktop: 15px; /* alto · extraído: 15px */
+  --tn-tipo-botao-secundario-tamanho-mobile: 15px; /* alto · extraído: 15px */
+  --tn-tipo-botao-secundario-altura-linha: 1; /* alto · extraído: 1 */
+  --tn-tipo-botao-secundario-espacamento-letras: normal; /* alto */
+  --tn-tipo-botao-secundario-caixa: uppercase; /* alto */
+  --tn-tipo-menu-familia: 'Poppins', sans-serif; /* alto */
+  --tn-tipo-menu-peso: 600; /* alto */
+  --tn-tipo-menu-estilo: italic; /* alto */
+  --tn-tipo-menu-tamanho-desktop: 15px; /* alto · extraído: 15px */
+  --tn-tipo-menu-tamanho-mobile: 15px; /* alto · extraído: 15px */
+  --tn-tipo-menu-altura-linha: 1.6; /* alto · extraído: 1.6 (24px) */
+  --tn-tipo-menu-espacamento-letras: normal; /* alto */
+  --tn-tipo-menu-caixa: uppercase; /* alto */
+  --tn-tipo-rodape-rotulo-familia: 'Montserrat', sans-serif; /* alto */
+  --tn-tipo-rodape-rotulo-peso: 700; /* alto */
+  --tn-tipo-rodape-rotulo-estilo: normal; /* alto */
+  --tn-tipo-rodape-rotulo-tamanho-desktop: 16px; /* alto · extraído: 16px */
+  --tn-tipo-rodape-rotulo-tamanho-mobile: 16px; /* alto · extraído: 16px */
+  --tn-tipo-rodape-rotulo-altura-linha: 1; /* alto · extraído: 1 / 1.6 */
+  --tn-tipo-rodape-rotulo-espacamento-letras: normal; /* alto */
+  --tn-tipo-rodape-rotulo-caixa: uppercase; /* alto */
+  --tn-tipo-copyright-familia: 'Poppins', sans-serif; /* alto */
+  --tn-tipo-copyright-peso: 300; /* alto */
+  --tn-tipo-copyright-estilo: normal; /* alto */
+  --tn-tipo-copyright-tamanho-desktop: 22px; /* alto · extraído: 22px */
+  --tn-tipo-copyright-tamanho-mobile: 24px; /* alto · extraído: 24px */
+  --tn-tipo-copyright-altura-linha: 1; /* alto · extraído: 1 */
+  --tn-tipo-copyright-espacamento-letras: -0.02em; /* alto */
+  --tn-tipo-copyright-caixa: none; /* alto */
+  --tn-tipo-espacamento-letras-titulos: -0.02em; /* alto */
+
+  /* espaco */
+  --tn-espaco-secao-padding-vertical: 80px; /* alto */
+  --tn-espaco-secao-padding-lateral: 50px; /* alto */
+  --tn-espaco-secao-padding-lateral-mobile: 20px; /* alto */
+  --tn-espaco-secao-vermelha-padding-vertical: 170px; /* alto */
+  --tn-espaco-faixa-padding: 20px; /* alto */
+  --tn-espaco-widgets-gap: 20px; /* alto */
+  --tn-espaco-botao-padding: 12px 24px; /* alto */
+  --tn-espaco-moldura-botao-padding: 5px; /* alto */
+  --tn-espaco-card-padding: 15px 15px 50px; /* alto */
+
+  /* layout */
+  --tn-layout-container-max: 1140px; /* alto */
+  --tn-layout-container-max-tablet: 1024px; /* alto */
+  --tn-layout-container-max-mobile: 767px; /* alto */
+  --tn-layout-breakpoint-mobile: 767px; /* alto */
+  --tn-layout-breakpoint-tablet: 1024px; /* alto */
+  --tn-layout-hero-altura-min: 713px; /* alto */
+  --tn-layout-divisor-v-altura: 136px; /* alto */
+  --tn-layout-proporcao-card-modalidade: 2 / 3; /* alto */
+
+  /* raio */
+  --tn-raio-nenhum: 0px; /* alto */
+  --tn-raio-moldura: 1px; /* alto */
+  --tn-raio-destaque-texto: 12px; /* alto */
+  --tn-raio-pilula: 20px; /* alto */
+  --tn-raio-circulo: 50%; /* alto */
+  --tn-raio-icone-rodape: 10%; /* alto */
+
+  /* borda */
+  --tn-borda-moldura-cta: 2px solid #FF0000; /* alto */
+  --tn-borda-card-evento: 2px solid #A91411; /* alto */
+  --tn-borda-divisor: 1px solid #790F0F; /* alto */
+  --tn-borda-separador-branco: 5px solid #FFFFFF; /* alto */
+  --tn-borda-galeria: 2px solid #CFCFCF; /* alto */
+
+  /* sombra */
+  --tn-sombra-card: 0px 11px 27px -11px rgba(0, 0, 0, 0.5); /* alto */
+  --tn-sombra-texto: none; /* alto */
+
+  /* opacidade */
+  --tn-opacidade-overlay-foto: 0.9; /* alto */
+  --tn-opacidade-overlay-fundadores: 0.85; /* alto */
+  --tn-opacidade-overlay-hero-evento: 0.8; /* alto */
+  --tn-opacidade-hover-icone-social: 0.9; /* alto */
+
+  /* video */
+  --tn-video-largura: 1080px; /* alto */
+  --tn-video-altura: 1920px; /* alto */
+  --tn-video-fps: 30; /* alto */
+  --tn-video-safe-topo: 150px; /* alto */
+  --tn-video-safe-base: 250px; /* alto */
+  --tn-video-safe-lateral: 60px; /* baixo */
+
+  /* movimento */
+  --tn-movimento-extraido-duracao-padrao: 0.3s; /* extraido · alto */
+  --tn-movimento-extraido-duracao-transform: 0.4s; /* extraido · alto */
+  --tn-movimento-extraido-easing-padrao: ease; /* extraido · alto */
+  --tn-movimento-extraido-hover-grow-escala: 1.1; /* extraido · alto */
+  --tn-movimento-extraido-carrossel-autoplay: 5000ms; /* extraido · alto */
+  --tn-movimento-extraido-carrossel-velocidade: 500ms; /* extraido · alto */
+  --tn-movimento-extraido-animacao-entrada: nenhuma; /* extraido · alto */
+  --tn-movimento-proposta-corte-duro: 0ms; /* proposta · baixo */
+  --tn-movimento-proposta-entrada-rapida: 300ms; /* proposta · médio */
+  --tn-movimento-proposta-entrada-impacto: 200ms; /* proposta · baixo */
+  --tn-movimento-proposta-easing-saida: cubic-bezier(0.16, 1, 0.3, 1); /* proposta · baixo */
+  --tn-movimento-proposta-easing-entrada: cubic-bezier(0.7, 0, 0.84, 0); /* proposta · baixo */
+  --tn-movimento-proposta-deslocamento-diagonal: -12deg; /* proposta · baixo */
+  --tn-movimento-proposta-escala-impacto: 1.1; /* proposta · médio */
+}
