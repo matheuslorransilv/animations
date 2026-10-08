@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>TEAM NOGUEIRA · Reels 01b · Teaser MMA 15 s (AIDA)</title>
+<!--
+  Reels 1080×1920, 30 fps, 15 s, em transições contínuas (pendencias.md C5, decisão do cliente de 08/10/2026).
+  Função pura do tempo: window.seek(t) pinta o frame t.
+    python3 films/mma-teaser-15s/score.py                                       # score.wav, beats.json, beats.js
+    node render.mjs films/mma-teaser-15s --sheet                                # folha de contato, um frame por beat
+    node render.mjs films/mma-teaser-15s --audio films/mma-teaser-15s/score.wav # render final
+    python3 films/mma-teaser-15s/fluidez.py out/mma-teaser-15s.mp4              # frames parados, trechos e cortes
+  Cores, fontes, easing e durações vêm só de design-system/tokens.css.
+-->
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  html, body {
+    margin: 0; width: var(--tn-video-largura); height: var(--tn-video-altura);
+    overflow: hidden; background: var(--tn-cor-preto);
+  }
+  body { position: relative; } /* camadas e palco medem 1080×1920 mesmo antes do viewport ser ajustado */
+  .camada { position: absolute; inset: 0; }
+
+  /* fundo: gradiente que deriva e anéis que giram devagar (paralaxe: mais lentos que o palco) */
+  #gradiente {
+    background-image: var(--tn-gradiente-overlay-foto-secao); background-size: 100% 300%; background-repeat: no-repeat;
+    opacity: var(--tn-gradiente-overlay-foto-secao-opacidade);
+  }
+  #aneis circle { fill: none; stroke: var(--tn-cor-vermelho-marca); stroke-width: 6px; }
+  #vermelho { background: var(--tn-cor-vermelho-marca); }
+  .banda {
+    position: absolute; top: -200px; width: 240px; height: 2320px; visibility: hidden;
+    background: var(--tn-gradiente-faixa-vermelha-diagonal);
+  }
+
+  #palco { position: absolute; inset: 0; }
+  .bloco { position: absolute; left: 0; top: 0; width: 100%; text-align: center; visibility: hidden; }
+  .display {
+    margin: 0; white-space: nowrap; color: var(--tn-cor-branco);
+    font-family: var(--tn-tipo-titulo-secao-familia); font-weight: var(--tn-tipo-titulo-secao-peso);
+    font-style: var(--tn-tipo-titulo-secao-estilo); text-transform: var(--tn-tipo-titulo-secao-caixa);
+    letter-spacing: var(--tn-tipo-titulo-secao-espacamento-letras); line-height: var(--tn-tipo-titulo-secao-altura-linha);
+  }
+  .display em { font-style: inherit; color: var(--tn-cor-carmim-destaque); }
+  .cartao-texto {
+    margin: 0; white-space: nowrap; color: var(--tn-cor-vermelho-marca);
+    font-family: var(--tn-tipo-titulo-card-familia); font-weight: var(--tn-tipo-titulo-card-peso);
+    font-style: var(--tn-tipo-titulo-card-estilo); text-transform: var(--tn-tipo-titulo-card-caixa);
+    letter-spacing: var(--tn-tipo-titulo-card-espacamento-letras); line-height: var(--tn-tipo-titulo-card-altura-linha);
+    font-size: 72px; text-align: center;
+  }
+  .ui {
+    margin: 0; white-space: nowrap;
+    font-family: var(--tn-tipo-botao-familia); font-weight: var(--tn-tipo-botao-peso);
+    font-style: var(--tn-tipo-botao-estilo); text-transform: var(--tn-tipo-botao-caixa);
+    letter-spacing: var(--tn-tipo-botao-espacamento-letras); line-height: var(--tn-tipo-botao-altura-linha);
+  }
+  .linha { display: block; }
+  .palavra { display: inline-block; }
+
+  #p1 { font-size: 120px; }
+  #p2, #p8 { font-size: 112px; }
+  #p5, #p7, #vitorias { font-size: 96px; }
+  #p6 { font-size: 88px; } /* "IRMÃOS NOGUEIRA." cabe em 960 px mesmo com deriva e câmera */
+  #p1 { z-index: 1; }       /* "UFC." fica na frente da faixa que cresce atrás dele */
+
+  .logo { position: absolute; left: 0; top: 0; visibility: hidden; }
+  #simbolo-a { width: 160px; height: 160px; }
+  #simbolo-b { width: 240px; height: 240px; }
+  #lockup { width: 560px; }
+
+  /* o objeto: a faixa de "UFC" que vira cartões, faixa do contador e cartão da data */
+  .ancora { position: absolute; left: 0; top: 0; width: 0; height: 0; visibility: hidden; }
+  .forma { position: absolute; box-shadow: var(--tn-sombra-card); border-radius: var(--tn-raio-moldura); overflow: hidden; }
+  .face { position: absolute; inset: 0; }
+  .face.vermelha { background: var(--tn-cor-vermelho-marca); }
+  .face.branca { background: var(--tn-cor-branco); }
+  .escurece { position: absolute; inset: 0; background: var(--tn-cor-preto); opacity: 0; }
+  .centrado { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); }
+
+  #contador { font-size: 96px; }
+  #contador .janela { clip-path: inset(0 -400px); height: 1em; }
+  #contador .lista > div { height: 1em; text-align: center; }
+  #data { text-align: center; }
+  #digitos { font-size: 128px; color: var(--tn-cor-vermelho-marca); display: flex; justify-content: center; }
+  .coluna { height: 1em; clip-path: inset(0 -60px); }
+  .coluna .rolo { display: block; }
+  .coluna .rolo > span { display: block; height: 1em; text-align: center; }
+  #horario { margin-top: 20px; font-size: 53px; color: var(--tn-cor-preto); }
+
+  #cta { text-align: center; }
+  #moldura { position: relative; display: inline-block; padding: calc(var(--tn-espaco-moldura-botao-padding) * 1080 / 390); }
+  #moldura > svg { position: absolute; inset: 0; overflow: visible; } /* só o contorno, não a seta */
+  #moldura rect { fill: none; stroke: var(--tn-cor-vermelho-vivo); stroke-width: 6px; stroke-dasharray: 1; }
+  #botao {
+    background: var(--tn-gradiente-botao-principal); border-radius: var(--tn-raio-nenhum); color: var(--tn-cor-branco);
+    font-size: 48px; padding: calc(12px * 1080 / 390) calc(24px * 1080 / 390); /* --tn-espaco-botao-padding × 1080/390 */
+  }
+  /* seta do CTA: ícone fa-arrow-right do Font Awesome Free 5.15.4, como no site (decisão em pendencias.md A11).
+     Cópia original em fa-arrow-right.svg; o desenho vai inline para receber a cor do token. */
+  #seta { width: 0.875em; height: 1em; vertical-align: -0.125em; margin-left: calc(5px * 1080 / 390); fill: var(--tn-cor-branco); }
+</style>
+</head>
+<body>
+  <div id="fundo" class="camada">
+    <div id="gradiente" class="camada"></div>
+    <svg id="aneis" class="camada" viewBox="0 0 1080 1920" width="1080" height="1920">
+      <circle r="220"/><circle r="340"/><circle r="470"/><circle r="600"/>
+    </svg>
+  </div>
+  <div id="vermelho" class="camada"></div>
+  <div id="banda-1" class="banda"></div>
+  <div id="banda-2" class="banda"></div>
+
+  <div id="palco">
+    <!-- ATO 1 · ATENÇÃO -->
+    <img id="simbolo-a" class="logo" src="../../design-system/assets/logo/LOGO-VERMELHO-E-BRANCO.png" alt="">
+    <div id="p1" class="bloco display"><div class="linha">ELE JÁ LUTOU</div><div class="linha">NO <span id="ufc" class="palavra">UFC.</span></div></div>
+    <div id="p2" class="bloco display"><div class="linha">AGORA, ELE VAI</div><div class="linha">TREINAR <em>VOCÊ.</em></div></div>
+
+    <!-- ATO 2 · INTERESSE: o objeto e os cartões -->
+    <div id="objeto" class="ancora">
+      <div class="forma"><div class="face vermelha"></div><div class="face branca"></div><div class="escurece"></div></div>
+      <div id="texto-1" class="centrado cartao-texto"><div class="linha">EX-LUTADOR</div><div class="linha">DO UFC</div></div>
+      <div id="contador" class="centrado display">
+        <div class="janela"><div class="lista"><div>JUNGLE FIGHT</div><div>MAX FIGHT</div><div>IRON FIGHT</div><div>UFC</div></div></div>
+      </div>
+      <div id="data" class="centrado">
+        <div id="digitos" class="display"></div>
+        <div id="horario" class="ui">SEG · QUA · SEX · 20H</div>
+      </div>
+    </div>
+    <div id="cartao-2" class="ancora">
+      <div class="forma"><div class="face branca"></div><div class="escurece"></div></div>
+      <div class="centrado cartao-texto"><div class="linha">DESTAQUE DO</div><div class="linha">TUF BRASIL</div></div>
+    </div>
+    <div id="cartao-3" class="ancora">
+      <div class="forma"><div class="face branca"></div><div class="escurece"></div></div>
+      <div class="centrado cartao-texto"><div class="linha">NOCAUTEADOR E</div><div class="linha">ESPECIALISTA EM</div><div class="linha">TROCAÇÃO</div></div>
+    </div>
+    <div id="vitorias" class="bloco display"><div class="linha">VITÓRIAS NO</div></div>
+
+    <!-- ATO 3 · DESEJO -->
+    <div id="p5" class="bloco display"><div class="linha">IMAGINE TREINAR</div><div class="linha">COM ELE.</div></div>
+    <img id="simbolo-b" class="logo" src="../../design-system/assets/logo/LOGO-VERMELHO-E-BRANCO.png" alt="">
+    <div id="p6" class="bloco display"><div class="linha">NA CASA DOS</div><div class="linha">IRMÃOS NOGUEIRA.</div></div>
+    <div id="p7" class="bloco display"><div class="linha">MESMO SEM</div><div class="linha"><em>SABER LUTAR.</em></div></div>
+
+    <!-- ATO 4 · AÇÃO -->
+    <div id="p8" class="bloco display"><div class="linha">NOVA TURMA</div><div class="linha">DE MMA</div></div>
+    <img id="lockup" class="logo" src="../../design-system/assets/logo/Arte-Banner-1.png" alt="TEAM NOGUEIRA">
+    <div id="cta" class="bloco">
+      <div id="moldura">
+        <svg><rect pathLength="1"/></svg>
+        <div id="botao" class="ui">AGENDAR AULA GRATUITA<svg id="seta" viewBox="0 0 448 512" aria-hidden="true"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+<script src="beats.js"></script>
+<script>
+const FPS = 30;
+const DURACAO = 15;
+window.film = { duration: DURACAO, fps: FPS, width: 1080, height: 1920 };
+
+const $ = (id) => document.getElementById(id);
+const limita = (x) => Math.min(Math.max(x, 0), 1);
+const fase = (t, inicio, dur) => (dur > 0 ? limita((t - inicio) / dur) : t >= inicio ? 1 : 0);
+const mistura = (a, b, p) => a + (b - a) * p;
+const mostra = (no, sim) => { no.style.visibility = sim ? 'visible' : 'hidden'; };
+
+// Curva cúbica de Bézier (mesma definição do CSS), para os easings lidos dos tokens.
+function bezier(x1, y1, x2, y2) {
+  const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+  const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+  const X = (u) => ((ax * u + bx) * u + cx) * u;
+  const Y = (u) => ((ay * u + by) * u + cy) * u;
+  return (x) => {
+    if (x <= 0) return 0;
+    if (x >= 1) return 1;
+    let lo = 0, hi = 1, u = x;
+    for (let i = 0; i < 40; i++) { if (X(u) < x) lo = u; else hi = u; u = (lo + hi) / 2; }
+    return Y(u);
+  };
+}
+// Palavras-chave de easing do CSS, pela definição da especificação (o token extraído é "ease").
+const PALAVRAS_EASING = { ease: [0.25, 0.1, 0.25, 1], linear: [0, 0, 1, 1], 'ease-in': [0.42, 0, 1, 1],
+  'ease-out': [0, 0, 0.58, 1], 'ease-in-out': [0.42, 0, 0.58, 1] };
+
+// Linguagem de entrada e saída de texto pedida pelo cliente (C5 em pendencias.md).
+const PALAVRA = { dur: 0.35, stagger: 0.08, blur: 14, sobe: 40 };
+const SAIDA = { blur: 14, sobe: 60 };
+const PUSH_IN = 0.06;      // palco: 1.00 → 1.06 em 15 s
+const PUSH_IN_FUNDO = 0.02; // fundo: mais lento que o palco (paralaxe)
+const DERIVA = 0.04;        // cada frase e logo cresce 4% ao longo da vida: nada fica parado enquanto é lido
+const linear = (x) => x;
+
+let MOV, B, CY, TAM = {};
+
+const pronto = (async () => {
+  const faces = ['italic 800 120px Poppins', 'italic 700 72px Poppins', '700 53px Montserrat'];
+  await Promise.all(faces.map((f) => document.fonts.load(f, 'ÁÉÍÓÚÃÕÇÊ·/0123456789')));
+  for (const f of faces) if (!document.fonts.check(f)) throw new Error(`fonte não carregou: ${f}`);
+  await Promise.all([...document.images].map((img) => img.decode()));
+
+  const raiz = getComputedStyle(document.documentElement);
+  const token = (nome) => {
+    const v = raiz.getPropertyValue(nome).trim();
+    if (!v) throw new Error(`token ausente: ${nome}`);
+    return v;
+  };
+  const segundos = (v) => (v.endsWith('ms') ? parseFloat(v) / 1000 : parseFloat(v));
+  const curva = (v) => bezier(...(PALAVRAS_EASING[v] ?? v.match(/-?[\d.]+/g).map(Number)));
+  MOV = {
+    rapida: segundos(token('--tn-movimento-proposta-entrada-rapida')),
+    impacto: segundos(token('--tn-movimento-proposta-entrada-impacto')),
+    transform: segundos(token('--tn-movimento-extraido-duracao-transform')),
+    padraoDur: segundos(token('--tn-movimento-extraido-duracao-padrao')),
+    saida: curva(token('--tn-movimento-proposta-easing-saida')),
+    entrada: curva(token('--tn-movimento-proposta-easing-entrada')),
+    padrao: curva(token('--tn-movimento-extraido-easing-padrao')),
+    escala: parseFloat(token('--tn-movimento-proposta-escala-impacto')),
+    diagonal: token('--tn-movimento-proposta-deslocamento-diagonal'),
+  };
+  // Centro óptico da área útil: meio entre a safe zone de cima e a de baixo (y ≈ 910).
+  CY = (parseFloat(token('--tn-video-safe-topo')) + 1920 - parseFloat(token('--tn-video-safe-base'))) / 2;
+  $('palco').style.transformOrigin = `540px ${CY}px`;
+
+  if (!window.BEATS || window.BEATS.beats.length < 30) throw new Error('beats.js ausente ou incompleto: rode score.py');
+  B = window.BEATS.beats.map((t) => Math.round(t * FPS) / FPS);
+
+  prepara();
+})();
+
+// ---------- preparação: palavras, dígitos e medidas (uma vez, antes do primeiro frame) ----------
+
+function separaPalavras(no) {
+  for (const filho of [...no.childNodes]) {
+    if (filho.nodeType === Node.TEXT_NODE) {
+      const frag = document.createDocumentFragment();
+      for (const parte of filho.textContent.split(/(\s+)/)) {
+        if (!parte) continue;
+        if (/^\s+$/.test(parte)) { frag.append(' '); continue; }
+        const s = document.createElement('span');
+        s.className = 'palavra';
+        s.textContent = parte;
+        frag.append(s);
+      }
+      filho.replaceWith(frag);
+    } else if (!filho.classList.contains('palavra')) separaPalavras(filho);
+  }
+}
+
+const ROLAGEM_DIGITOS = 6, ESCALONA_DIGITOS = 0.04, PASSO_CONTADOR = 0.16; // iguais ao score.py (ticks)
+
+function montaDigitos() {
+  const alvo = '14/10';
+  for (const ch of alvo) {
+    const col = document.createElement('span');
+    col.className = 'coluna';
+    const rolo = document.createElement('span');
+    rolo.className = 'rolo';
+    const d = Number(ch);
+    const seq = Number.isNaN(d) ? [ch] : Array.from({ length: ROLAGEM_DIGITOS + 1 }, (_, k) => (d - ROLAGEM_DIGITOS + k + 20) % 10);
+    for (const x of seq) {
+      const s = document.createElement('span');
+      s.textContent = x;
+      rolo.append(s);
+    }
+    col.append(rolo);
+    $('digitos').append(col);
+    const medida = document.createElement('span');
+    medida.textContent = ch;
+    $('digitos').append(medida);
+    col.style.width = `${medida.getBoundingClientRect().width}px`;
+    medida.remove();
+  }
+}
+
+function prepara() {
+  for (const id of ['p1', 'p2', 'p5', 'p6', 'p7', 'p8', 'vitorias', 'texto-1', 'horario']) separaPalavras($(id));
+  for (const c of document.querySelectorAll('#cartao-2 .cartao-texto, #cartao-3 .cartao-texto')) separaPalavras(c);
+  montaDigitos();
+
+  for (const id of ['p1', 'p2', 'p5', 'p6', 'p7', 'p8', 'vitorias', 'cta']) TAM[id] = $(id).offsetHeight;
+  TAM.lockup = $('lockup').offsetHeight;
+  TAM.nomes = [...document.querySelectorAll('#contador .lista > div')].map((d) => {
+    const s = document.createElement('span');
+    s.textContent = d.textContent;
+    d.textContent = '';
+    d.append(s);
+    return s.getBoundingClientRect().width;
+  });
+  const r = $('ufc').getBoundingClientRect();
+  TAM.ufc = { w: r.width, h: r.height };
+  montaRoteiro();
+}
+
+// Empilha itens centrados em y = CY; devolve o centro de cada um. Números no meio da lista são espaços.
+function empilha(itens, centro = CY) {
+  const total = itens.reduce((s, it) => s + (typeof it === 'number' ? it : it[1]), 0);
+  let y = centro - total / 2;
+  const pos = {};
+  for (const it of itens) {
+    if (typeof it === 'number') { y += it; continue; }
+    pos[it[0]] = y + it[1] / 2;
+    y += it[1];
+  }
+  return pos;
+}
+
+// Interpola propriedades numéricas entre chaves {t, dur, ease, ...props}; cada chave parte do estado anterior.
+function anima(t, chaves) {
+  const estado = { ...chaves[0] };
+  for (let k = 1; k < chaves.length; k++) {
+    const c = chaves[k];
+    if (t < c.t) break;
+    const p = c.ease(fase(t, c.t, c.dur));
+    for (const prop in c) if (!['t', 'dur', 'ease'].includes(prop)) estado[prop] = mistura(estado[prop], c[prop], p);
+  }
+  return estado;
+}
+
+// ---------- roteiro ----------
+
+let R; // roteiro calculado a partir dos beats medidos e das medidas
+
+function montaRoteiro() {
+  const OBJ = { barra: [260, 18], cartao: [760, 340], faixa: 120, data: [680, 313], escalaFinal: 0.8 };
+  const g1 = empilha([['simbolo-a', 160], 72, ['p1', TAM.p1]]); // o acento de "JÁ" sobe acima da linha: 72 px garante o respiro
+  const g2 = empilha([['p2', TAM.p2], 48, ['barra', OBJ.barra[1]]]);
+  const g4 = empilha([['vitorias', TAM.vitorias], 28, ['faixa', OBJ.faixa]]);
+  const g6 = empilha([['simbolo-b', 240], 72, ['p6', TAM.p6]]);
+  const g8 = empilha([['p8', TAM.p8], 64, ['data', OBJ.data[1]]]);
+  const g9 = empilha([['lockup', TAM.lockup], 56, ['data', OBJ.data[1] * OBJ.escalaFinal], 56, ['cta', TAM.cta]]);
+
+  // "UFC." fica na segunda linha da frase 1: o centro dele, no layout em repouso
+  const ufcY = g1.p1 - TAM.p1 / 2 + TAM.p1 * 0.75;
+  const ufcX = $('ufc').getBoundingClientRect().left + TAM.ufc.w / 2;
+
+  const X = {
+    p1: B[3] - 0.1,           // cada frase sai 100 ms antes da seguinte entrar: 200 ms de sobreposição
+    p2: B[5] + 0.25,          // frase 2 se desfaz; a faixa vira cartão (3,0–3,4 s)
+    colapso: B[12] + 0.15,    // cartões se recolhem na faixa do contador
+    contador: B[15] - 0.1,
+    p5: B[17] - 0.1,
+    p6: B[20] - 0.1,
+    p7: B[23] - 0.3,          // sai enquanto o vermelho chega, antes de ficar por cima dele
+    p8: B[26],
+    logoB: B[20] - 0.45,      // o logo sai antes de "SABER LUTAR." (carmim) chegar perto
+  };
+  const wipe1 = B[23] - 0.25, wipe2 = B[26];
+  const passos = [3, 2, 1].map((k) => B[14] - k * PASSO_CONTADOR); // iguais ao score.py; o último trava no beat
+  const lockupEntra = X.p8 + MOV.padraoDur; // entra quando "NOVA TURMA DE MMA" terminou de sair
+
+  const T = MOV.transform, padrao = MOV.padrao, saida = MOV.saida, entrada = MOV.entrada;
+  const larguraNome = (k) => TAM.nomes[k] + 96;
+  R = {
+    X, wipe1, wipe2, passos, lockupEntra, ufcX,
+    frases: {
+      p1: { linhas: [B[0], B[1]], y: [[0, g1.p1]], sai: X.p1 },
+      p2: { linhas: [B[3]], y: [[0, g2.p2]], sai: X.p2 },
+      vitorias: { linhas: [B[13]], y: [[0, g4.vitorias]], sai: X.contador },
+      p5: { linhas: [B[15]], y: [[0, CY]], sai: X.p5 },
+      p6: { linhas: [B[17]], y: [[0, g6.p6], [X.logoB + 0.15, CY]], sai: X.p6 }, // o logo sai e a frase se recentraliza
+      p7: { linhas: [B[20]], y: [[0, CY]], sai: X.p7 },
+      p8: { linhas: [B[23]], y: [[0, CY], [B[24], g8.p8]], sai: X.p8 },
+      cta: { linhas: [B[27]], y: [[0, g9.cta]], sai: Infinity, fixo: true }, // hold final: só o push-in
+    },
+    logos: {
+      'simbolo-a': { entra: -1, y: g1['simbolo-a'], sai: X.p1 - 0.1, deriva: true }, // vai junto, um pouco à frente
+      'simbolo-b': { entra: X.p5 + 0.25, y: g6['simbolo-b'], sai: X.logoB, deriva: true }, // entra quando a frase 5 já saiu
+      lockup: { entra: lockupEntra, y: g9.lockup, sai: Infinity },
+    },
+    objeto: [
+      { cx: ufcX, cy: ufcY, w: TAM.ufc.w + 72, h: TAM.ufc.h * 0.92, sx: 0, skew: -12, rot: 0, s: 1, bl: 0, br: 0, esc: 0, op: 1, blur: 0, dy: 0 },
+      { t: B[2], dur: MOV.rapida, ease: saida, sx: 1 },                                     // cresce do centro, no beat
+      { t: X.p1, dur: T, ease: padrao, cx: 540, cy: g2.barra, w: OBJ.barra[0], h: OBJ.barra[1] }, // vira barra sob a frase 2
+      { t: X.p2, dur: T, ease: padrao, cy: CY, w: OBJ.cartao[0], h: OBJ.cartao[1], skew: 0, rot: -3, br: 1 }, // vira cartão branco
+      { t: X.p2 + T, dur: B[8] - X.p2 - T, ease: linear, rot: -2.2, s: 1.03 },             // deriva enquanto é lido
+      { t: B[8], dur: MOV.padraoDur, ease: padrao, s: 0.94, esc: 0.12 },                   // recua quando o 2º chega
+      { t: B[10], dur: MOV.padraoDur, ease: padrao, s: 0.88, esc: 0.22 },
+      { t: X.colapso, dur: T, ease: padrao, s: 1, esc: 0, rot: 0, skew: -12, w: larguraNome(0), h: OBJ.faixa, bl: 1 }, // volta a ser faixa
+      { t: B[13], dur: T, ease: padrao, cy: g4.faixa },                                     // abre espaço para "VITÓRIAS NO"
+      { t: X.contador, dur: MOV.padraoDur, ease: entrada, blur: SAIDA.blur, dy: -SAIDA.sobe },  // sai com a frase,
+      { t: X.contador, dur: MOV.padraoDur, ease: padrao, op: 0 },                                // na mesma curva das frases
+      { t: B[24] - 0.001, dur: 0, ease: padrao, cy: g8.data + 300, op: 0, blur: PALAVRA.blur, dy: 0, w: OBJ.data[0], h: OBJ.data[1], skew: 0, bl: 0, br: 1 },
+      { t: B[24], dur: T, ease: saida, cy: g8.data, op: 1, blur: 0 },                     // volta como cartão da data
+      { t: B[25], dur: B[26] - B[25], ease: linear, s: 1.03 },
+      { t: wipe2, dur: T, ease: padrao, cy: g9.data, s: OBJ.escalaFinal },                  // se reposiciona na composição final
+    ],
+    cartoes: {
+      'cartao-2': [
+        { cy: CY + 300, rot: 2, s: 1, esc: 0, sy: 1, op: 0, blur: PALAVRA.blur, w: OBJ.cartao[0], h: OBJ.cartao[1] },
+        { t: B[8], dur: T, ease: saida, cy: CY, op: 1, blur: 0 },
+        { t: B[8] + T, dur: B[10] - B[8] - T, ease: linear, rot: 1.2, s: 1.03 },
+        { t: B[10], dur: MOV.padraoDur, ease: padrao, s: 0.94, esc: 0.12 },
+        { t: X.colapso, dur: MOV.padraoDur, ease: entrada, sy: 0, rot: 0 },
+      ],
+      'cartao-3': [
+        { cy: CY + 300, rot: -1, s: 1, esc: 0, sy: 1, op: 0, blur: PALAVRA.blur, w: OBJ.cartao[0], h: OBJ.cartao[1] },
+        { t: B[10], dur: T, ease: saida, cy: CY, op: 1, blur: 0 },
+        { t: B[10] + T, dur: X.colapso - B[10] - T, ease: linear, rot: -0.2, s: 1.03 },
+        { t: X.colapso, dur: MOV.padraoDur, ease: entrada, sy: 0, rot: 0 },
+      ],
+    },
+    entraCartao: { 'cartao-2': B[8], 'cartao-3': B[10] },
+    larguraNome,
+  };
+}
+
+// ---------- pintura ----------
+
+// Palavra por palavra: blur 14 → 0, y +40 → 0, opacidade 0 → 1 em 350 ms (easing-saida).
+function palavras(lista, t, inicio, intervalo = PALAVRA.stagger) {
+  lista.forEach((w, i) => {
+    const p = MOV.saida(fase(t, inicio + i * intervalo, PALAVRA.dur));
+    const g = w.id === 'ufc' ? golpe(t, B[2]) : 1; // "UFC." leva o golpe junto com a faixa
+    w.style.opacity = p;
+    w.style.filter = p < 1 ? `blur(${PALAVRA.blur * (1 - p)}px)` : 'none';
+    w.style.transform = `translateY(${PALAVRA.sobe * (1 - p)}px) scale(${g})`;
+  });
+}
+
+// Saída sobreposta: sobe 60 px e ganha blur com easing-entrada, em duracao-padrao. A opacidade cai pelo
+// easing-padrao, mais cedo: no cruzamento com a frase seguinte a antiga já é só um rastro.
+function saida(t, inicio) {
+  const x = fase(t, inicio, MOV.padraoDur);
+  const q = MOV.entrada(x);
+  return { q, op: 1 - MOV.padrao(x), blur: SAIDA.blur * q, dy: -SAIDA.sobe * q };
+}
+
+// Posição y com reflow animado (easing-padrao) entre os centros de cada fase.
+function trilho(t, pontos) {
+  let y = pontos[0][1];
+  for (let k = 1; k < pontos.length; k++) y = mistura(y, pontos[k][1], MOV.padrao(fase(t, pontos[k][0], MOV.transform)));
+  return y;
+}
+
+function golpe(t, inicio) {
+  return t < inicio ? 1 : MOV.escala + (1 - MOV.escala) * MOV.saida(fase(t, inicio, MOV.impacto));
+}
+
+function pintaFrase(id, cfg, t) {
+  const no = $(id);
+  const ativo = t >= cfg.linhas[0] && t < cfg.sai + MOV.padraoDur;
+  mostra(no, ativo);
+  if (!ativo) return;
+  const linhas = no.querySelectorAll('.linha');
+  if (linhas.length && cfg.linhas.length > 1) linhas.forEach((l, i) => palavras([...l.querySelectorAll('.palavra')], t, cfg.linhas[i]));
+  else palavras(id === 'cta' ? [no.firstElementChild] : [...no.querySelectorAll('.palavra')], t, cfg.linhas[0]);
+  const s = saida(t, cfg.sai);
+  no.style.opacity = s.op;
+  no.style.filter = s.blur > 0 ? `blur(${s.blur}px)` : 'none';
+  const z = cfg.fixo ? 1 : 1 + DERIVA * fase(t, cfg.linhas[0], cfg.sai + MOV.padraoDur - cfg.linhas[0]);
+  no.style.transform = `translateY(${trilho(t, cfg.y) - TAM[id] / 2 + s.dy}px) scale(${z})`;
+}
+
+function pintaLogo(id, cfg, t) {
+  const no = $(id);
+  const ativo = t >= cfg.entra && t < cfg.sai + MOV.padraoDur;
+  mostra(no, ativo);
+  if (!ativo) return;
+  const p = cfg.entra < 0 ? 1 : MOV.saida(fase(t, cfg.entra, PALAVRA.dur)); // entra com escala 1.1 → 1.0
+  const s = saida(t, cfg.sai);
+  const z = cfg.deriva ? 1 + DERIVA * fase(t, Math.max(cfg.entra, 0), cfg.sai + MOV.padraoDur - Math.max(cfg.entra, 0)) : 1;
+  const escala = mistura(MOV.escala, 1, p) * z;
+  no.style.opacity = p * s.op;
+  const blur = PALAVRA.blur * (1 - p) + s.blur;
+  no.style.filter = blur > 0 ? `blur(${blur}px)` : 'none';
+  no.style.transform = `translate(${540 - no.offsetWidth / 2}px, ${cfg.y - no.offsetHeight / 2 + s.dy}px) scale(${escala})`;
+}
+
+function pintaForma(ancora, e) {
+  const forma = ancora.querySelector('.forma');
+  forma.style.left = `${-e.w / 2}px`;
+  forma.style.top = `${-e.h / 2}px`;
+  forma.style.width = `${e.w}px`;
+  forma.style.height = `${e.h}px`;
+  forma.style.transform = `skewX(${e.skew}deg) scaleX(${e.sx ?? 1}) scaleY(${e.sy ?? 1})`;
+  const branca = forma.querySelector('.face.branca');
+  if (branca && 'br' in e) branca.style.clipPath = `inset(0 ${(1 - e.br) * 100}% 0 ${e.bl * 100}%)`;
+  forma.querySelector('.escurece').style.opacity = e.esc;
+}
+
+function pintaObjeto(t) {
+  const no = $('objeto');
+  const e = anima(t, R.objeto);
+  // na rolagem do contador a faixa se ajusta ao nome da vez
+  const pos = R.passos.reduce((s, p) => s + MOV.saida(fase(t, p, PASSO_CONTADOR)), 0);
+  if (t >= R.X.colapso + MOV.transform && t < B[24]) {
+    const k = Math.min(Math.floor(pos), 2);
+    e.w = mistura(R.larguraNome(k), R.larguraNome(k + 1), pos - k);
+  }
+  mostra(no, t >= B[2] && (t < R.X.contador + MOV.padraoDur || t >= B[24]));
+  const g = golpe(t, B[2]) * golpe(t, B[14]);
+  no.style.opacity = e.op;
+  no.style.filter = e.blur > 0 ? `blur(${e.blur}px)` : 'none';
+  no.style.transform = `translate(${e.cx ?? 540}px, ${e.cy + e.dy}px) rotate(${e.rot}deg) scale(${e.s * g})`;
+  pintaForma(no, e);
+
+  // texto do cartão 1
+  const t1 = $('texto-1');
+  t1.style.visibility = t >= B[6] && t < R.X.colapso + MOV.padraoDur ? 'inherit' : 'hidden';
+  palavras([...t1.querySelectorAll('.palavra')], t, B[6]);
+  const s1 = saida(t, R.X.colapso);
+  t1.style.opacity = s1.op;
+  t1.style.filter = s1.blur > 0 ? `blur(${s1.blur}px)` : 'none';
+
+  // contador: os nomes rolam e travam em UFC
+  const cont = $('contador');
+  const contAtivo = t >= R.X.colapso + 0.15 && t < B[24];
+  cont.style.visibility = contAtivo ? 'inherit' : 'hidden';
+  if (contAtivo) {
+    const p = MOV.saida(fase(t, R.X.colapso + 0.15, PALAVRA.dur));
+    cont.style.opacity = p;
+    cont.style.filter = p < 1 ? `blur(${PALAVRA.blur * (1 - p)}px)` : 'none';
+    cont.querySelector('.lista').style.transform = `translateY(${-pos}em)`;
+  }
+
+  // data: dígitos rolando até travar no beat 25, horário palavra por palavra
+  const data = $('data');
+  data.style.visibility = t >= B[24] ? 'inherit' : 'hidden';
+  document.querySelectorAll('#digitos .coluna').forEach((col, c) => {
+    const rolo = col.querySelector('.rolo');
+    const n = rolo.children.length - 1;
+    if (!n) return;
+    const ini = B[24] + c * ESCALONA_DIGITOS;
+    rolo.style.transform = `translateY(${-n * MOV.saida(fase(t, ini, B[25] - ini))}em)`;
+  });
+  $('digitos').style.transform = `scale(${golpe(t, B[25])})`;
+  palavras([...$('horario').querySelectorAll('.palavra')], t, B[25], 0.06);
+}
+
+function pintaCartoes(t) {
+  for (const id of ['cartao-2', 'cartao-3']) {
+    const no = $(id);
+    const e = anima(t, R.cartoes[id]);
+    const ativo = t >= R.entraCartao[id] && t < R.X.colapso + MOV.padraoDur;
+    mostra(no, ativo);
+    if (!ativo) continue;
+    no.style.transform = `translate(540px, ${e.cy}px) rotate(${e.rot}deg) scale(${e.s})`;
+    no.style.opacity = e.op;
+    no.style.filter = e.blur > 0 ? `blur(${e.blur}px)` : 'none';
+    pintaForma(no, { ...e, skew: 0 });
+    const texto = no.querySelector('.cartao-texto');
+    palavras([...texto.querySelectorAll('.palavra')], t, R.entraCartao[id] + 0.1);
+    const s = saida(t, R.X.colapso);
+    texto.style.opacity = s.op;
+    texto.style.filter = s.blur > 0 ? `blur(${s.blur}px)` : 'none';
+  }
+}
+
+// Wipe diagonal (-12°): a borda é uma reta inclinada que cruza a tela; a banda em gradiente vai na frente.
+const INCLINA = Math.tan(12 * Math.PI / 180) * 960;
+function borda(t, inicio) {
+  return mistura(-500, 1080 + 500, MOV.padrao(fase(t, inicio, MOV.transform + 0.1)));
+}
+function pintaFundo(t) {
+  $('palco').style.transform = `scale(${1 + PUSH_IN * t / DURACAO})`;
+  $('fundo').style.transform = `scale(${1 + PUSH_IN_FUNDO * t / DURACAO})`;
+  $('gradiente').style.backgroundPositionY = `${6 + 6 * Math.sin(2 * Math.PI * t / 10)}%`;
+  const ang = Math.PI * 1.25 + 2 * Math.PI * t / 30;
+  const cx = 880 + 70 * Math.cos(ang), cy = 1700 + 70 * Math.sin(ang); // longe do respiro dos logos
+  document.querySelectorAll('#aneis circle').forEach((c) => { c.setAttribute('cx', cx.toFixed(2)); c.setAttribute('cy', cy.toFixed(2)); });
+
+  const e1 = borda(t, R.wipe1), e2 = borda(t, R.wipe2);
+  $('vermelho').style.clipPath =
+    `polygon(${e2 + INCLINA}px 0, ${e1 + INCLINA}px 0, ${e1 - INCLINA}px 1920px, ${e2 - INCLINA}px 1920px)`;
+  for (const [id, e] of [['banda-1', e1], ['banda-2', e2]]) {
+    const banda = $(id);
+    mostra(banda, e > -400 && e < 1080 + 400);
+    banda.style.left = `${e - 120}px`;
+    banda.style.transform = `skewX(${MOV.diagonal})`;
+  }
+}
+
+function pinta(t) {
+  pintaFundo(t);
+  for (const [id, cfg] of Object.entries(R.frases)) pintaFrase(id, cfg, t);
+  for (const [id, cfg] of Object.entries(R.logos)) pintaLogo(id, cfg, t);
+  pintaObjeto(t);
+  pintaCartoes(t);
+  // moldura do CTA se desenha em entrada-rapida, depois que o botão entra
+  $('moldura').querySelector('rect').style.strokeDashoffset = 1 - MOV.saida(fase(t, B[27] + 0.15, MOV.rapida));
+  const m = $('moldura');
+  const rect = m.querySelector('rect');
+  rect.setAttribute('x', 0); rect.setAttribute('y', 0);
+  rect.setAttribute('width', m.offsetWidth); rect.setAttribute('height', m.offsetHeight);
+}
+
+window.seek = async (t) => {
+  await pronto;
+  pinta(t);
+};
+</script>
+</body>
+</html>

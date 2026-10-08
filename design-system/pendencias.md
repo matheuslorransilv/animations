@@ -16,6 +16,7 @@ Itens que não puderam ser determinados pelo site, que são ambíguos ou que pre
 | A8 | **Estilo de legenda (`figcaption`), `h4`, `h6`, badges** | Não são usados no site. | – |
 | A9 | **Texto integral da licença OFL 1.1** das fontes | O site serve os `.woff2` sem o arquivo de licença; ele não foi baixado de outro domínio (regra desta extração). | Adicionar `assets/fonts/OFL.txt` copiado de fonte oficial (Google Fonts/SIL), com aprovação. |
 | A10 | **Conteúdo dos vídeos do YouTube** (“Canal no Youtube”, “história da Carla”) | `youtube.com` ficou fora do escopo de acesso; os iframes aparecem vazios nos screenshots. | Analisar à parte, se o estilo dos vídeos existentes for referência para os Reels. |
+| A11 | **Seta → do CTA em vídeo** | Nenhum dos 11 `.woff2` de `assets/fonts/` (subconjunto latin) tem o caractere → (U+2192), conferido na tabela de caracteres de cada arquivo em 08/10/2026. No site a seta é o ícone `fa-arrow-right` do Font Awesome, que não foi baixado (ver §D). Escrita como texto, ela sairia numa fonte do sistema. Aberto pelo teaser 01b (`films/mma-teaser-15s/`). | **Decisão do cliente em 08/10/2026:** usar o ícone `fa-arrow-right` do **Font Awesome Free 5.15.4** (a versão 5 é a do site: `fa-running`, `fa-arrow-alt-circle-up`), baixado do pacote oficial `@fortawesome/fontawesome-free` no npm, na cor `--tn-cor-branco`. Licença dos ícones: CC BY 4.0; a atribuição vai embutida no SVG. Cópia original em `films/mma-teaser-15s/fa-arrow-right.svg`. Os demais ícones do Font Awesome (§D) continuam sem decisão. |
 
 ## B. Ambiguidades e inconsistências do próprio site
 
@@ -40,7 +41,7 @@ Itens que não puderam ser determinados pelo site, que são ambíguos ou que pre
 | C2 | Logo em vídeo: tamanho mínimo e respiro | símbolo ≥ 160 px, lockup ≥ 400 px, respiro ≥ 25% do diâmetro | `regras-para-video.md` §4 |
 | C3 | Posição do logo | só na abertura e na cartela final, sem bug de canto | `regras-para-video.md` §4 |
 | C4 | Margem lateral da safe zone | 60 px | `tokens.json → video.safe-lateral` |
-| C5 | Linguagem de motion | cortes secos, entradas de 200/300 ms, easings, wipe diagonal de −12°, punch-in de 1.1 | `movimento.md` §2 |
+| C5 | Linguagem de motion | cortes secos, entradas de 200/300 ms, easings, wipe diagonal de −12°, punch-in de 1.1. **Decisão do cliente em 08/10/2026:** a linguagem passa a ser de **transições contínuas**, no estilo da referência de fluidez (texto palavra por palavra, saídas sobrepostas, a mesma forma atravessando o vídeo, rolagem tipo contador, câmera viva). O corte seco deixa de ser o padrão entre cenas; a troca de fundo preto ↔ vermelho passa a ser só por wipe diagonal de −12°. Continuam proibidos: fade-in genérico de tudo, glow, partículas, rótulos de canto e molduras de quadro. `tokens.json` e `tokens.css` não foram alterados. | `movimento.md` §2 |
 | C6 | Espessura das linhas no vídeo | 2 px do site → 6 px no vídeo | `regras-para-video.md` §2 |
 
 ## D. Fora do escopo desta extração (pode ser útil depois)
