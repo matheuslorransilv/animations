@@ -19,6 +19,12 @@ npx playwright install chromium          # skip where Chromium is preinstalled
 Playwright is pinned to 1.56.1, whose Chromium build (1194) ships preinstalled
 in Claude Code cloud sessions.
 
+## Making a film
+
+Studio rules and the render workflow are in [CLAUDE.md](CLAUDE.md): films are pure
+functions of time rendered by `node render.mjs`, synced to a `beats.json` from
+`python3 beats.py`.
+
 ## Claude Code skills and plugins
 
 These live under `.claude/` and load when you open the repo in Claude Code:
