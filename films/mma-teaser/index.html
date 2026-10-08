@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>TEAM NOGUEIRA · Reels 01 · Teaser MMA (ATENÇÃO)</title>
+<!--
+  Reels 1080×1920, 30 fps, 10 s. Função pura do tempo: window.seek(t) pinta o frame t.
+    python3 films/mma-teaser/score.py                                   # score.wav, beats.json, beats.js
+    node render.mjs films/mma-teaser --sheet                            # folha de contato, um frame por beat
+    node render.mjs films/mma-teaser --audio films/mma-teaser/score.wav # render final
+  Cores, fontes, easing e durações vêm só de design-system/tokens.css.
+-->
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  html, body {
+    margin: 0; width: var(--tn-video-largura); height: var(--tn-video-altura);
+    overflow: hidden; background: var(--tn-cor-preto);
+  }
+  .cena, .camada { position: absolute; inset: 0; overflow: hidden; visibility: hidden; }
+  .escura { background: var(--tn-cor-preto); }
+  .marca { background: var(--tn-cor-vermelho-marca); }
+  #flash { background: var(--tn-cor-branco); }
+
+  .display {
+    margin: 0; white-space: nowrap; color: var(--tn-cor-branco);
+    font-family: var(--tn-tipo-titulo-secao-familia); font-weight: var(--tn-tipo-titulo-secao-peso);
+    font-style: var(--tn-tipo-titulo-secao-estilo); text-transform: var(--tn-tipo-titulo-secao-caixa);
+    letter-spacing: var(--tn-tipo-titulo-secao-espacamento-letras); line-height: var(--tn-tipo-titulo-secao-altura-linha);
+  }
+  .display em { font-style: inherit; color: var(--tn-cor-carmim-destaque); }
+  .ui {
+    margin: 0; white-space: nowrap;
+    font-family: var(--tn-tipo-botao-familia); font-weight: var(--tn-tipo-botao-peso);
+    font-style: var(--tn-tipo-botao-estilo); text-transform: var(--tn-tipo-botao-caixa);
+    letter-spacing: var(--tn-tipo-botao-espacamento-letras); line-height: var(--tn-tipo-botao-altura-linha);
+  }
+  .corpo {
+    margin: 0; white-space: nowrap; color: var(--tn-cor-branco);
+    font-family: var(--tn-tipo-corpo-familia); font-weight: var(--tn-tipo-corpo-peso);
+    font-style: var(--tn-tipo-corpo-estilo); letter-spacing: var(--tn-tipo-corpo-espacamento-letras);
+    line-height: var(--tn-tipo-corpo-altura-linha);
+  }
+  .centro { position: absolute; left: 0; right: 0; text-align: center; }
+  /* Máscara de entrada: o texto sobe de dentro dela. A folga evita cortar o itálico e os acentos. */
+  .mascara { position: absolute; overflow: hidden; padding: 0.16em 0.14em; margin: -0.16em -0.14em; }
+  .mascara > * { font-size: inherit; }
+
+  /* 1 · gancho */
+  #simbolo { position: absolute; width: 200px; height: 200px; left: 440px; top: 230px; }
+  #exufc { top: 640px; font-size: 128px; }
+  #vai { top: 788px; font-size: 120px; }
+  #aqui { top: 908px; font-size: 120px; }
+
+  /* wipe diagonal */
+  #faixa {
+    position: absolute; width: 900px; height: 2600px; left: 90px; top: -340px;
+    background: var(--tn-gradiente-faixa-vermelha-diagonal); visibility: hidden;
+  }
+
+  /* 2 · impacto */
+  #aneis { position: absolute; inset: 0; }
+  #aneis circle { fill: none; stroke: var(--tn-cor-vermelho-marca); stroke-width: 6px; }
+  #mma { top: 896px; font-size: 128px; }
+
+  /* 3 · data */
+  #chevron {
+    position: absolute; left: 0; top: 0; width: 100%;
+    height: calc(var(--tn-layout-divisor-v-altura) * 1080 / 390); /* 136 px do site em 390 px → 1080 px */
+    fill: var(--tn-cor-branco);
+  }
+  #titulo-1 { left: 124px; top: 600px; font-size: 96px; }
+  #titulo-2 { left: 124px; top: 700px; font-size: 96px; }
+  #card {
+    position: absolute; left: 60px; right: 60px; top: 880px; padding: 56px 64px 60px;
+    background: var(--tn-cor-branco); border-radius: var(--tn-raio-moldura); box-shadow: var(--tn-sombra-card);
+  }
+  #dia { font-size: 128px; color: var(--tn-cor-vermelho-marca); transform-origin: 0 50%; }
+  #horario { margin-top: 28px; font-size: 53px; color: var(--tn-cor-preto); }
+
+  /* 4 · curiosidade */
+  #lockup { position: absolute; width: 616px; left: 232px; top: 429px; } /* 616 × 1.1 = 678: o pico do punch-in não passa do nativo */
+  #pergunta { top: 960px; font-size: 128px; }
+  #fique { left: 0; right: 0; top: 1130px; text-align: center; font-size: 44px; }
+  .colchete { position: absolute; background: var(--tn-cor-vermelho-vivo); }
+  /* colchete em L no canto inferior esquerdo de "FIQUE DE OLHO.", como nos cards de modalidade do site */
+  #colchete-v { width: 6px; left: 336px; bottom: calc(1920px - 1214px); }
+  #colchete-h { height: 6px; left: 336px; top: 1208px; }
+</style>
+</head>
+<body>
+  <section id="gancho" class="cena escura">
+    <img id="simbolo" src="../../design-system/assets/logo/LOGO-VERMELHO-E-BRANCO.png" alt="">
+    <h1 id="exufc" class="display centro">UM <em>EX-UFC</em></h1>
+    <p id="vai" class="display centro">VAI DAR AULA</p>
+    <p id="aqui" class="display centro">AQUI.</p>
+  </section>
+
+  <section id="impacto" class="cena escura">
+    <svg id="aneis" viewBox="0 0 1080 1920" width="1080" height="1920">
+      <circle cx="540" cy="960" r="0"/><circle cx="540" cy="960" r="0"/><circle cx="540" cy="960" r="0"/>
+      <circle cx="540" cy="960" r="0"/><circle cx="540" cy="960" r="0"/>
+    </svg>
+    <p id="mma" class="display centro">MMA.</p>
+  </section>
+
+  <section id="data" class="cena marca">
+    <svg id="chevron" viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="M500,98.9L0,6.1V0h1000v6.1L500,98.9z"/></svg>
+    <div id="titulo-1" class="mascara"><h2 class="display">O MMA CHEGA NA</h2></div>
+    <div id="titulo-2" class="mascara"><h2 class="display">TEAM NOGUEIRA</h2></div>
+    <div id="card">
+      <p id="dia" class="display">14/10</p>
+      <p id="horario" class="ui">SEG · QUA · SEX · 20H</p>
+    </div>
+  </section>
+
+  <section id="curiosidade" class="cena escura">
+    <img id="lockup" src="../../design-system/assets/logo/Arte-Banner-1.png" alt="TEAM NOGUEIRA">
+    <h2 id="pergunta" class="display centro">QUEM É <em>ELE?</em></h2>
+    <div id="fique" class="mascara"><p class="corpo">FIQUE DE OLHO.</p></div>
+    <div id="colchete-v" class="colchete"></div>
+    <div id="colchete-h" class="colchete"></div>
+  </section>
+
+  <div id="faixa"></div>
+  <div id="flash" class="camada"></div>
+
+<script src="beats.js"></script>
+<script>
+const FPS = 30;
+window.film = { duration: 10, fps: FPS, width: 1080, height: 1920 };
+
+const $ = (id) => document.getElementById(id);
+const limita = (x) => Math.min(Math.max(x, 0), 1);
+const fase = (t, inicio, dur) => limita((t - inicio) / dur);
+// Cenas e camadas ligam com 'visible'; o que está dentro delas usa 'inherit', para nunca vazar de uma cena oculta.
+const liga = (no, sim) => { no.style.visibility = sim ? 'visible' : 'hidden'; };
+const mostra = (no, sim) => { no.style.visibility = sim ? 'inherit' : 'hidden'; };
+
+// Curva cúbica de Bézier (mesma definição do CSS), para os easings lidos dos tokens.
+function bezier(x1, y1, x2, y2) {
+  const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+  const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+  const X = (u) => ((ax * u + bx) * u + cx) * u;
+  const Y = (u) => ((ay * u + by) * u + cy) * u;
+  return (x) => {
+    if (x <= 0) return 0;
+    if (x >= 1) return 1;
+    let lo = 0, hi = 1, u = x;
+    for (let i = 0; i < 40; i++) { if (X(u) < x) lo = u; else hi = u; u = (lo + hi) / 2; }
+    return Y(u);
+  };
+}
+
+// Ruído com semente (mulberry32): o mesmo frame sempre treme igual.
+function mulberry32(a) {
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const ruido = (frame, canal) => mulberry32(0x14102026 + frame * 2 + canal)() * 2 - 1;
+
+let MOV, B;
+
+const pronto = (async () => {
+  const faces = ['italic 800 128px Poppins', '500 44px Poppins', '700 53px Montserrat'];
+  await Promise.all(faces.map((f) => document.fonts.load(f, 'QUEMÉ?·/14')));
+  for (const f of faces) if (!document.fonts.check(f)) throw new Error(`fonte não carregou: ${f}`);
+  await Promise.all([...document.images].map((img) => img.decode()));
+
+  const raiz = getComputedStyle(document.documentElement);
+  const token = (nome) => {
+    const v = raiz.getPropertyValue(nome).trim();
+    if (!v) throw new Error(`token ausente: ${nome}`);
+    return v;
+  };
+  const segundos = (v) => (v.endsWith('ms') ? parseFloat(v) / 1000 : parseFloat(v));
+  const curva = (v) => bezier(...v.match(/-?[\d.]+/g).map(Number));
+  MOV = {
+    rapida: segundos(token('--tn-movimento-proposta-entrada-rapida')),
+    impacto: segundos(token('--tn-movimento-proposta-entrada-impacto')),
+    saida: curva(token('--tn-movimento-proposta-easing-saida')),
+    escala: parseFloat(token('--tn-movimento-proposta-escala-impacto')),
+    diagonal: token('--tn-movimento-proposta-deslocamento-diagonal'),
+  };
+
+  // Beats medidos (beats.json, refinados até o ataque pelo score.py), no frame mais próximo.
+  if (!window.BEATS || window.BEATS.beats.length < 20) throw new Error('beats.js ausente ou incompleto: rode score.py');
+  B = window.BEATS.beats.map((t) => Math.round(t * FPS) / FPS);
+})();
+
+// Golpe: aparece no beat em escala 1.1 e assenta em 1.0 (entrada-impacto, easing-saida), tremendo cada vez menos.
+function slam(no, t, inicio, { tremor = 0, visivelAntes = false } = {}) {
+  if (t < inicio) { mostra(no, visivelAntes); no.style.transform = 'none'; return; }
+  mostra(no, true);
+  const s = MOV.escala + (1 - MOV.escala) * MOV.saida(fase(t, inicio, MOV.impacto));
+  const resto = 1 - fase(t, inicio, MOV.rapida);
+  const f = Math.round(t * FPS);
+  no.style.transform = `translate(${tremor * resto * ruido(f, 0)}px, ${tremor * resto * ruido(f, 1)}px) scale(${s})`;
+}
+
+// Entrada em deslocamento (entrada-rapida, easing-saida): de (dx, dy) até a posição final.
+function entra(no, t, inicio, dx, dy) {
+  if (t < inicio) { mostra(no, false); return; }
+  mostra(no, true);
+  const r = 1 - MOV.saida(fase(t, inicio, MOV.rapida));
+  no.style.transform = `translate(${dx * r}px, ${dy * r}px)`;
+}
+
+const RAIOS = [250, 400, 590, 830, 1130];
+const RAIO_INICIAL = 200; // logo além da meia largura de "MMA.": o anel não risca as letras
+const COLCHETE = { v: 110, h: 180 };
+
+function pinta(t) {
+  const corte = B[4];                   // o wipe chega ao centro aqui
+  const fimFlash = corte + 2 / FPS;     // 2 frames de branco
+  liga($('gancho'), t < corte);
+  liga($('flash'), t >= corte && t < fimFlash);
+  liga($('impacto'), t >= fimFlash && t < B[9]);
+  liga($('data'), t >= B[9] && t < B[15]);
+  liga($('curiosidade'), t >= B[15]);
+
+  // 1 · gancho: símbolo já no frame 1; três golpes no beat
+  slam($('exufc'), t, B[0], { tremor: 7 });
+  slam($('vai'), t, B[1], { tremor: 6 });
+  slam($('aqui'), t, B[2], { tremor: 8 });
+
+  // wipe diagonal (movimento.md, gesto 1): atravessa até o centro em entrada-rapida com easing-saida
+  const faixa = $('faixa');
+  const inicioWipe = corte - MOV.rapida;
+  liga(faixa, t >= inicioWipe && t < corte);
+  faixa.style.transform = `translateX(${-1320 * (1 - MOV.saida(fase(t, inicioWipe, MOV.rapida)))}px) rotate(${MOV.diagonal})`;
+
+  // 2 · impacto: "MMA." em punch-in; um anel novo a cada beat, nascendo de trás da palavra até a borda
+  slam($('mma'), t, fimFlash);
+  document.querySelectorAll('#aneis circle').forEach((c, i) => {
+    const inicio = i === 0 ? fimFlash : B[4 + i];
+    mostra(c, t >= inicio);
+    c.setAttribute('r', (RAIO_INICIAL + (RAIOS[i] - RAIO_INICIAL) * MOV.saida(fase(t, inicio, MOV.rapida))).toFixed(2));
+  });
+
+  // 3 · data: chevron desce, título sobe da máscara, card entra, a data golpeia de novo
+  const chevron = $('chevron');
+  chevron.style.transform = `translateY(${-100 * (1 - MOV.saida(fase(t, B[9], MOV.rapida)))}%)`;
+  entra($('titulo-1').firstElementChild, t, B[9], 0, 120);
+  entra($('titulo-2').firstElementChild, t, B[9] + 2 / FPS, 0, 120);
+  entra($('card'), t, B[10], 0, 160);
+  slam($('dia'), t, B[12], { visivelAntes: true });
+
+  // 4 · curiosidade: lockup 1.1 → 1.0, pergunta no beat, colchete em L, "FIQUE DE OLHO."
+  const lockup = $('lockup');
+  lockup.style.transform = `scale(${MOV.escala + (1 - MOV.escala) * MOV.saida(fase(t, B[15], MOV.rapida))})`;
+  slam($('pergunta'), t, B[16], { tremor: 7 });
+  const l = MOV.saida(fase(t, B[17], MOV.rapida));
+  mostra($('colchete-v'), t >= B[17]);
+  mostra($('colchete-h'), t >= B[17]);
+  $('colchete-v').style.height = `${COLCHETE.v * l}px`;
+  $('colchete-h').style.width = `${COLCHETE.h * l}px`;
+  entra($('fique').firstElementChild, t, B[18], 0, 80);
+}
+
+window.seek = async (t) => {
+  await pronto;
+  pinta(t);
+};
+</script>
+</body>
+</html>
