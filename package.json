@@ -1,0 +1,21 @@
+{
+  "name": "animations",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matheuslorransilv/animations.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matheuslorransilv/animations/issues"
+  },
+  "homepage": "https://github.com/matheuslorransilv/animations#readme",
+  "devDependencies": {
+    "playwright": "1.56.1"
+  },
+  "private": true
+}

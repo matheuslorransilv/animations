@@ -1,0 +1,10 @@
+node_modules/
+__pycache__/
+.venv/
+
+# Render output
+out/
+renders/
+*.mp4
+*.mov
+*.webm
