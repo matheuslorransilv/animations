@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEAM NOGUEIRA — Design system</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* Toda cor, fonte, raio, sombra e borda abaixo vem de tokens.css (--tn-*).
+     Únicas exceções: medidas de layout desta página de conferência (gaps, larguras de grid). */
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--tn-cor-branco); color: var(--tn-cor-texto-escuro);
+         font-family: var(--tn-tipo-corpo-familia); font-weight: var(--tn-tipo-corpo-peso);
+         font-size: var(--tn-tipo-corpo-tamanho-mobile); line-height: var(--tn-tipo-corpo-altura-linha); }
+  @media (min-width: 768px) { body { font-size: var(--tn-tipo-corpo-tamanho-desktop); } }
+  .wrap { max-width: var(--tn-layout-container-max); margin: 0 auto; padding: 0 var(--tn-espaco-secao-padding-lateral-mobile); }
+  section { padding: var(--tn-espaco-secao-padding-vertical) 0; }
+
+  /* Títulos (assinatura) */
+  .t-secao { font-family: var(--tn-tipo-titulo-secao-familia); font-weight: var(--tn-tipo-titulo-secao-peso);
+             font-style: var(--tn-tipo-titulo-secao-estilo); text-transform: var(--tn-tipo-titulo-secao-caixa);
+             letter-spacing: var(--tn-tipo-titulo-secao-espacamento-letras); line-height: var(--tn-tipo-titulo-secao-altura-linha);
+             font-size: var(--tn-tipo-titulo-secao-tamanho-mobile); color: var(--tn-cor-vermelho-marca); margin: 0 0 24px; }
+  @media (min-width: 768px) { .t-secao { font-size: var(--tn-tipo-titulo-secao-tamanho-desktop); } }
+  .t-secao .preto { color: var(--tn-cor-preto); }
+  .destaque-claro { color: var(--tn-cor-vermelho-escuro); }
+  .destaque-escuro { color: var(--tn-cor-carmim-destaque); }
+
+  .divisor { display: flex; align-items: center; gap: 16px; margin: 0 0 24px;
+             font-family: var(--tn-tipo-titulo-divisor-familia); font-weight: var(--tn-tipo-titulo-divisor-peso);
+             font-style: var(--tn-tipo-titulo-divisor-estilo); text-transform: var(--tn-tipo-titulo-divisor-caixa);
+             letter-spacing: var(--tn-tipo-titulo-divisor-espacamento-letras); line-height: var(--tn-tipo-titulo-divisor-altura-linha);
+             font-size: var(--tn-tipo-titulo-divisor-tamanho-mobile); color: var(--tn-cor-vinho); }
+  @media (min-width: 768px) { .divisor { font-size: var(--tn-tipo-titulo-divisor-tamanho-desktop); } }
+  .divisor::before, .divisor::after { content: ""; flex: 1; border-top: var(--tn-borda-divisor); }
+
+  /* Hero */
+  .hero { position: relative; min-height: var(--tn-layout-hero-altura-min); background: var(--tn-cor-fundo-hero-escuro) url("assets/imagens/team-nogueira-abc-hero-bg.png") center / cover no-repeat;
+          color: var(--tn-cor-branco); display: flex; flex-direction: column; padding: 30px 0 0; }
+  .topo { display: flex; align-items: center; gap: 40px; }
+  .topo .simbolo { width: 71px; height: 71px; }
+  .menu { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; flex: 1; justify-content: center;
+          font-family: var(--tn-tipo-menu-familia); font-weight: var(--tn-tipo-menu-peso); font-style: var(--tn-tipo-menu-estilo);
+          text-transform: var(--tn-tipo-menu-caixa); font-size: var(--tn-tipo-menu-tamanho-desktop); }
+  .menu li::before { content: "■"; color: var(--tn-cor-vermelho-vivo); margin-right: 5px; font-size: 10px; vertical-align: 2px; }
+  .sociais { display: flex; gap: 8px; }
+  .social { width: 40px; height: 40px; border-radius: var(--tn-raio-circulo); background: var(--tn-cor-vermelho-escuro); color: var(--tn-cor-branco);
+            display: grid; place-items: center; font-family: var(--tn-tipo-rodape-rotulo-familia); font-weight: var(--tn-tipo-rodape-rotulo-peso); font-size: 13px; }
+  .hero-corpo { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 570px; margin: 0; padding: 40px var(--tn-espaco-secao-padding-lateral-mobile) 80px; }
+  @media (min-width: 1180px) { .hero-corpo { margin-left: calc((100vw - var(--tn-layout-container-max)) / 2); padding-left: 0; } }
+  .moldura.cta { display: block; }
+  .lockup { width: 143px; margin-bottom: 12px; }
+  .hero h1 { margin: 0 0 16px; font-family: var(--tn-tipo-hero-titulo-familia); font-weight: var(--tn-tipo-hero-titulo-peso);
+             font-style: var(--tn-tipo-hero-titulo-estilo); text-transform: var(--tn-tipo-hero-titulo-caixa);
+             letter-spacing: var(--tn-tipo-hero-titulo-espacamento-letras); line-height: var(--tn-tipo-hero-titulo-altura-linha);
+             font-size: var(--tn-tipo-hero-titulo-tamanho-mobile); }
+  @media (min-width: 768px) { .hero h1 { font-size: var(--tn-tipo-hero-titulo-tamanho-desktop); } }
+  .hero p { margin: 0 0 24px; font-family: var(--tn-tipo-corpo-hero-familia); font-weight: var(--tn-tipo-corpo-hero-peso);
+            font-size: var(--tn-tipo-corpo-hero-tamanho-mobile); line-height: var(--tn-tipo-corpo-hero-altura-linha); }
+  @media (min-width: 768px) { .hero p { font-size: var(--tn-tipo-corpo-hero-tamanho-desktop); } .menu { display: flex; } }
+  @media (max-width: 767px) { .menu, .topo .simbolo { display: none; } .topo { justify-content: center; }
+    .hero { background-position: left center; } .hero-corpo { text-align: center; align-items: center; } .moldura.cta { width: 100%; } }
+
+  /* Botões */
+  .moldura { display: inline-block; padding: var(--tn-espaco-moldura-botao-padding); border: var(--tn-borda-moldura-cta); border-radius: var(--tn-raio-moldura); }
+  .btn { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--tn-cor-branco); background: var(--tn-gradiente-botao-principal);
+         padding: var(--tn-espaco-botao-padding); border-radius: var(--tn-raio-nenhum); font-family: var(--tn-tipo-botao-familia);
+         font-weight: var(--tn-tipo-botao-peso); font-size: var(--tn-tipo-botao-tamanho-desktop); line-height: var(--tn-tipo-botao-altura-linha); }
+  .btn.hover { background: var(--tn-gradiente-botao-principal-hover); }
+  .btn.sec { font-weight: var(--tn-tipo-botao-secundario-peso); font-size: var(--tn-tipo-botao-secundario-tamanho-desktop); }
+  .btn.pilula { border-radius: var(--tn-raio-pilula); }
+  .btn.whats { background: var(--tn-gradiente-botao-whatsapp); border-radius: var(--tn-raio-pilula); }
+  .linha-botoes { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; }
+  .rotulo { display: block; font-family: var(--tn-tipo-rodape-rotulo-familia); font-weight: var(--tn-tipo-rodape-rotulo-peso); font-size: 12px;
+            color: var(--tn-cor-texto-corpo); text-transform: uppercase; margin-top: 8px; }
+
+  /* Paleta */
+  .paleta { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+  .cor { border: 1px solid var(--tn-cor-cinza-borda-galeria); }
+  .cor .amostra { height: 96px; }
+  .cor .info { padding: 10px; font-size: 13px; line-height: 1.4; }
+  .cor b { display: block; font-family: var(--tn-tipo-botao-familia); font-weight: var(--tn-tipo-botao-peso); color: var(--tn-cor-preto); }
+  .grads { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 32px; }
+  .grad { height: 96px; display: flex; align-items: flex-end; padding: 10px; color: var(--tn-cor-branco); font-size: 13px; }
+
+  /* Faixa */
+  .faixa { background: var(--tn-cor-vermelho-marca); padding: var(--tn-espaco-faixa-padding); text-align: center; color: var(--tn-cor-branco);
+           font-family: var(--tn-tipo-titulo-faixa-familia); font-weight: var(--tn-tipo-titulo-faixa-peso); font-style: var(--tn-tipo-titulo-faixa-estilo);
+           text-transform: var(--tn-tipo-titulo-faixa-caixa); letter-spacing: var(--tn-tipo-titulo-faixa-espacamento-letras);
+           line-height: var(--tn-tipo-titulo-faixa-altura-linha); font-size: var(--tn-tipo-titulo-faixa-tamanho-mobile); }
+  @media (min-width: 768px) { .faixa { font-size: var(--tn-tipo-titulo-faixa-tamanho-desktop); } }
+
+  /* Seção vermelha com divisor em V + cards */
+  .vermelha { position: relative; background: var(--tn-gradiente-secao-vermelha); padding: var(--tn-espaco-secao-vermelha-padding-vertical) 0; }
+  .vermelha .v { position: absolute; left: 0; top: 0; width: 100%; height: var(--tn-layout-divisor-v-altura); }
+  .vermelha .v path { fill: var(--tn-cor-branco); }
+  .vermelha .t-secao { color: var(--tn-cor-branco); text-align: center; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--tn-espaco-widgets-gap); }
+  .card { background: var(--tn-cor-branco); border-radius: var(--tn-raio-moldura); padding: 24px 18px; text-align: center; }
+  .card img { width: 65%; margin-bottom: 15px; }
+  .card h3 { margin: 0 0 10px; color: var(--tn-cor-vermelho-vivo); font-family: var(--tn-tipo-titulo-card-familia); font-weight: var(--tn-tipo-titulo-card-peso);
+             font-style: var(--tn-tipo-titulo-card-estilo); text-transform: var(--tn-tipo-titulo-card-caixa); letter-spacing: var(--tn-tipo-titulo-card-espacamento-letras);
+             line-height: var(--tn-tipo-titulo-card-altura-linha); font-size: var(--tn-tipo-titulo-card-tamanho-desktop); }
+  .card p { margin: 0; color: var(--tn-cor-vermelho-escuro); font-family: var(--tn-tipo-descricao-card-familia); font-weight: var(--tn-tipo-descricao-card-peso);
+            font-size: var(--tn-tipo-descricao-card-tamanho-desktop); line-height: var(--tn-tipo-descricao-card-altura-linha); }
+  .evento { background: var(--tn-cor-branco); border: var(--tn-borda-card-evento); box-shadow: var(--tn-sombra-card); padding: var(--tn-espaco-card-padding); text-align: center;
+            font-family: var(--tn-tipo-titulo-secao-familia); font-weight: var(--tn-tipo-titulo-secao-peso); font-style: var(--tn-tipo-titulo-secao-estilo);
+            text-transform: uppercase; color: var(--tn-cor-vermelho-escuro); font-size: 15px; line-height: 1.1; }
+  .evento .mini { height: 60px; background: var(--tn-gradiente-overlay-foto-secao); margin-bottom: 10px; }
+
+  /* Tipografia */
+  .escala { width: 100%; border-collapse: collapse; }
+  .escala td { border-bottom: 1px solid var(--tn-cor-cinza-borda-galeria); padding: 14px 8px; vertical-align: middle; }
+  .escala td:first-child { width: 190px; font-size: 12px; color: var(--tn-cor-texto-corpo); font-family: var(--tn-tipo-rodape-rotulo-familia); font-weight: var(--tn-tipo-rodape-rotulo-peso); }
+  .pesos { display: flex; flex-wrap: wrap; gap: 18px; font-size: 28px; color: var(--tn-cor-preto); }
+
+  /* Logos */
+  .logos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .logo { height: 220px; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .logo img { max-width: 100%; max-height: 172px; object-fit: contain; }
+  .logo-legenda { font-size: 12px; color: var(--tn-cor-texto-corpo); margin-top: 6px; }
+  .logo-legenda.evitar { color: var(--tn-cor-vermelho-marca); font-weight: 700; }
+  .logo.escuro { background: var(--tn-cor-preto); } .logo.claro { background: var(--tn-cor-branco); border: 1px solid var(--tn-cor-cinza-borda-galeria); }
+  .logo.marca { background: var(--tn-cor-vermelho-marca); }
+
+  .never { height: 250px; background: url("assets/imagens/Team-Nogueira-never-quit-bg-1920x300-1.png") center / cover; }
+  footer { background: var(--tn-cor-preto); color: var(--tn-cor-branco); padding: 48px 0; font-size: 14px; }
+  footer strong { font-family: var(--tn-tipo-rodape-rotulo-familia); font-weight: var(--tn-tipo-rodape-rotulo-peso); font-size: var(--tn-tipo-rodape-rotulo-tamanho-desktop); }
+  .rod { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+  .copy { background: var(--tn-gradiente-faixa-vermelha-diagonal); color: var(--tn-cor-branco); text-align: center; padding: 8px;
+          font-family: var(--tn-tipo-copyright-familia); font-weight: var(--tn-tipo-copyright-peso); font-size: 16px; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap topo">
+    <img class="simbolo" src="assets/logo/LOGO-VERMELHO-E-BRANCO.png" alt="Símbolo Team Nogueira">
+    <ul class="menu"><li>A Team Nogueira</li><li>Grade aulas</li><li>Modalidades</li><li>Eventos e fotos</li></ul>
+    <div class="sociais"><span class="social">f</span><span class="social">ig</span><span class="social">wa</span></div>
+  </div>
+  <div class="wrap hero-corpo">
+    <img class="lockup" src="assets/logo/Arte-Banner-1.png" alt="Team Nogueira">
+    <h1>Academia de saúde física e <span class="destaque-escuro">emocional!</span></h1>
+    <p>Na Team Nogueira, o esporte vai além do físico, fortalecendo corpo, imunidade e equilíbrio emocional em um ambiente descontraído que valoriza o bem-estar e a união da equipe.</p>
+    <span class="moldura cta"><a class="btn" href="#" style="width:100%;justify-content:center">AGENDAR AULA GRATUITA →</a></span>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2 class="t-secao"><span class="preto">Paleta</span> da marca</h2>
+    <div class="paleta" id="paleta"></div>
+    <div class="grads">
+      <div class="grad" style="background: var(--tn-gradiente-botao-principal)">botao-principal</div>
+      <div class="grad" style="background: var(--tn-gradiente-botao-principal-hover)">botao-principal-hover</div>
+      <div class="grad" style="background: var(--tn-gradiente-secao-vermelha)">secao-vermelha</div>
+      <div class="grad" style="background: var(--tn-gradiente-faixa-vermelha-diagonal)">faixa-vermelha-diagonal</div>
+      <div class="grad" style="background: var(--tn-gradiente-overlay-foto-secao)">overlay-foto-secao</div>
+      <div class="grad" style="background: var(--tn-gradiente-overlay-hero-evento)">overlay-hero-evento</div>
+      <div class="grad" style="background: var(--tn-gradiente-botao-whatsapp)">botao-whatsapp</div>
+    </div>
+  </div>
+</section>
+
+<div class="faixa">Escolher praticar MMA é definir sua capacidade de ter multicapacidades.</div>
+
+<section>
+  <div class="wrap">
+    <h2 class="divisor">Tipografia</h2>
+    <table class="escala">
+      <tr><td>hero-titulo · Montserrat 800</td><td style="font-family:var(--tn-tipo-hero-titulo-familia);font-weight:var(--tn-tipo-hero-titulo-peso);font-size:var(--tn-tipo-hero-titulo-tamanho-desktop);line-height:1;letter-spacing:var(--tn-tipo-hero-titulo-espacamento-letras);text-transform:uppercase;color:var(--tn-cor-preto)">Praticar MMA é <span class="destaque-claro">você</span></td></tr>
+      <tr><td>titulo-secao · Poppins 800 itálico</td><td><span class="t-secao" style="margin:0;display:block"><span class="preto">Conheça as nossas</span> <span class="destaque-claro">modalidades</span></span></td></tr>
+      <tr><td>titulo-divisor · Poppins 800 itálico</td><td><span class="divisor" style="margin:0">O MMA - The Mixed Martial Arts</span></td></tr>
+      <tr><td>titulo-card · Poppins 700 itálico</td><td style="font-family:var(--tn-tipo-titulo-card-familia);font-weight:var(--tn-tipo-titulo-card-peso);font-style:var(--tn-tipo-titulo-card-estilo);font-size:var(--tn-tipo-titulo-card-tamanho-desktop);text-transform:uppercase;letter-spacing:var(--tn-tipo-titulo-card-espacamento-letras);color:var(--tn-cor-vermelho-vivo)">Cure-se da ansiedade</td></tr>
+      <tr><td>corpo · Poppins 500 · 19/1.6</td><td style="color:var(--tn-cor-texto-corpo)">O Mixed Martial Arts (MMA) é um dos esportes que continua em maior crescimento no mundo. A modalidade teve como berço o Vale Tudo.</td></tr>
+      <tr><td>descricao-card · Montserrat 500</td><td style="font-family:var(--tn-tipo-descricao-card-familia);font-weight:var(--tn-tipo-descricao-card-peso);font-size:var(--tn-tipo-descricao-card-tamanho-desktop);color:var(--tn-cor-vermelho-escuro)">Domine sua mente com artes marciais.</td></tr>
+      <tr><td>menu · Poppins 600 itálico</td><td style="font-family:var(--tn-tipo-menu-familia);font-weight:var(--tn-tipo-menu-peso);font-style:var(--tn-tipo-menu-estilo);font-size:var(--tn-tipo-menu-tamanho-desktop);text-transform:uppercase;color:var(--tn-cor-preto)">A Team Nogueira · Grade aulas · Modalidades</td></tr>
+      <tr><td>Poppins — pesos</td><td class="pesos"><span style="font-weight:300">Aa 300</span><span style="font-weight:400">Aa 400</span><span style="font-weight:500">Aa 500</span><span style="font-weight:600">Aa 600</span><span style="font-weight:700">Aa 700</span><span style="font-weight:800">Aa 800</span><span style="font-weight:800;font-style:italic">Aa 800 it</span></td></tr>
+      <tr><td>Montserrat — pesos</td><td class="pesos" style="font-family:var(--tn-fonte-destaque)"><span style="font-weight:500">Aa 500</span><span style="font-weight:600">Aa 600</span><span style="font-weight:700">Aa 700</span><span style="font-weight:800">Aa 800</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2 class="t-secao"><span class="preto">Botões</span></h2>
+    <div class="linha-botoes">
+      <div><span class="moldura"><a class="btn" href="#">AGENDAR AULA GRATUITA →</a></span><span class="rotulo">principal + moldura</span></div>
+      <div><span class="moldura"><a class="btn hover" href="#">AGENDAR AULA GRATUITA →</a></span><span class="rotulo">principal · hover</span></div>
+      <div><span class="moldura"><a class="btn sec" href="#">VER CANAL →</a></span><span class="rotulo">secundário</span></div>
+      <div><a class="btn pilula" href="#">Voltar ao topo ↑</a><span class="rotulo">flutuante</span></div>
+      <div><a class="btn whats" href="#">Faça sua aula gratuita</a><span class="rotulo">WhatsApp</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="vermelha">
+  <svg class="v" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true"><path d="M500,98.9L0,6.1V0h1000v6.1L500,98.9z"/></svg>
+  <div class="wrap">
+    <h2 class="t-secao">Benefícios dos treinos</h2>
+    <div class="cards">
+      <div class="card"><img src="assets/imagens/icones-beneficios/ansiedade.png" alt=""><h3>Cure-se da ansiedade</h3><p>Domine sua mente com artes marciais. Supere a ansiedade e encontre equilíbrio físico e mental.</p></div>
+      <div class="card"><img src="assets/imagens/icones-beneficios/batimento-cardiaco.png" alt=""><h3>Melhora cardíaca</h3><p>Fortaleça seu coração com artes marciais.</p></div>
+      <div class="card"><img src="assets/imagens/icones-beneficios/dormir.png" alt=""><h3>Sono de qualidade</h3><p>Durma melhor com artes marciais.</p></div>
+      <div class="card"><img src="assets/imagens/icones-beneficios/punho.png" alt=""><h3>Autodefesa</h3><p>Aprenda autodefesa com artes marciais.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="t-secao"><span class="preto">Logo</span> <span class="destaque-claro">e cards</span></h2>
+    <div class="logos">
+      <div><div class="logo escuro"><img src="assets/logo/LOGO-VERMELHO-E-BRANCO.png" alt="Símbolo para fundo escuro"></div><div class="logo-legenda">LOGO-VERMELHO-E-BRANCO.png · fundo escuro</div></div>
+      <div><div class="logo claro"><img src="assets/logo/LOGO-VERMELHO-E-PRETO.png" alt="Símbolo para fundo claro"></div><div class="logo-legenda">LOGO-VERMELHO-E-PRETO.png · fundo claro</div></div>
+      <div><div class="logo escuro"><img src="assets/logo/Arte-Banner-1.png" alt="Lockup Team Nogueira"></div><div class="logo-legenda">Arte-Banner-1.png · lockup, só fundo escuro</div></div>
+      <div><div class="logo marca"><img src="assets/logo/LOGO-VERMELHO-E-BRANCO.png" alt="Exemplo a evitar: símbolo sobre o vermelho da marca"></div><div class="logo-legenda evitar">EVITAR · sobre #981517 o anel some (contraste 1.0)</div></div>
+    </div>
+    <div class="cards" style="margin-top:32px;align-items:start">
+      <div class="evento"><div class="mini"></div>Muay Thai graduação novembro 2025</div>
+      <div class="evento"><div class="mini"></div>Jiu Jitsu campeonato interno 2026</div>
+      <img src="assets/imagens/11.png" alt="Card MMA" style="width:100%">
+      <img src="assets/imagens/8.png" alt="Card Jiu-Jitsu" style="width:100%">
+    </div>
+  </div>
+</section>
+
+<div class="never" role="img" aria-label="Never quit."></div>
+<footer>
+  <div class="wrap rod">
+    <div><strong>FALE CONOSCO.</strong><br>Envie sua mensagem pelo nosso WhatsApp.</div>
+    <div><strong>ENDEREÇO UNIDADE</strong><br>Av. Industrial, 591<br>Bairro Jardim, Santo André – SP.</div>
+    <div>TELEFONE<br><strong>(11) 4427-3660</strong><br>WhatsApp<br><strong>(11) 94031-3225</strong></div>
+  </div>
+</footer>
+<div class="copy">© Team Nogueira ABC. All Rights Reserved</div>
+
+<script>
+  // Paleta gerada a partir das próprias variáveis --tn-cor-* lidas do tokens.css
+  const nomes = ['vermelho-marca','vermelho-escuro','vermelho-vivo','carmim','carmim-destaque','vinho','vinho-profundo','vermelho-hover-link',
+                 'preto','preto-logo','fundo-hero-escuro','texto-escuro','texto-corpo','cinza-tema','cinza-borda-galeria','branco',
+                 'verde-whatsapp-inicio','verde-whatsapp-fim','verde-botao-galeria','amarelo-kids'];
+  const css = getComputedStyle(document.documentElement);
+  const lum = (h) => { const c = [1,3,5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).map(v => v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4); return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]; };
+  const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return ((x + 0.05) / (y + 0.05)).toFixed(2); };
+  const box = document.getElementById('paleta');
+  for (const n of nomes) {
+    const v = css.getPropertyValue('--tn-cor-' + n).trim();
+    const el = document.createElement('div'); el.className = 'cor';
+    el.innerHTML = `<div class="amostra" style="background:var(--tn-cor-${n})"></div><div class="info"><b>${v}</b>${n}<br>branco ${ratio(v, '#FFFFFF')} · preto ${ratio(v, '#000000')}</div>`;
+    box.appendChild(el);
+  }
+</script>
+</body>
+</html>
